@@ -5,5 +5,5 @@ type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
-	Role     bool   `json:"role"` // по умолчанию false (0)
+	Role     bool   `json:"role"` // admin или нет
 }
