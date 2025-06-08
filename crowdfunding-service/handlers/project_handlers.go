@@ -10,11 +10,9 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"crowdfunding-service/pkg"
 )
-
-type contextKey string
-
-const userIDKey contextKey = "user_id"
 
 // Project выводится клиенту
 type Project struct {
@@ -30,7 +28,7 @@ type Project struct {
 
 // POST /projects
 func CreateProjectHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	userIDVal := r.Context().Value(userIDKey)
+	userIDVal := r.Context().Value(pkg.UserIDKey)
 	if userIDVal == nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
