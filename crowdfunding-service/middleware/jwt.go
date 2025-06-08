@@ -48,3 +48,6 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		http.Error(w, "Invalid token claims", http.StatusUnauthorized)
 	}
 }
+
+
+

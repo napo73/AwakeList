@@ -12,22 +12,27 @@ import (
 )
 
 func main() {
+	// Создание папки для изображений
 	err := os.MkdirAll("uploads", os.ModePerm)
 	if err != nil {
 		log.Fatal("Failed to create uploads directory:", err)
 	}
 
+	// Инициализация базы данных
 	database, err := db.InitDB("projects.db")
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 	defer database.Close()
 
+	// Создаем маршрутизатор
 	mux := http.NewServeMux()
 
+	// /projects — GET и POST
 	mux.HandleFunc("/projects", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodPost:
+			// Защищённый маршрут
 			middleware.AuthMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				handlers.CreateProjectHandler(w, r, database)
 			})).ServeHTTP(w, r)
@@ -38,6 +43,7 @@ func main() {
 		}
 	})
 
+	// /projects/{id} и /projects/{id}/fund
 	mux.HandleFunc("/projects/", func(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case r.Method == http.MethodGet:
