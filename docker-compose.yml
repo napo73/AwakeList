@@ -1,0 +1,14 @@
+services:
+  auth-service:
+    build:
+      context: ./auth-service
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  crowdfunding-service:
+    build:
+      context: ./crowdfunding-service
+    ports:
+      - "8080:8080"
+    restart: unless-stopped

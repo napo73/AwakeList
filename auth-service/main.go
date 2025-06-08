@@ -23,4 +23,12 @@ func main() {
 	if err := http.ListenAndServe(":8000", nil); err != nil {
 		log.Fatal("Server error:", err)
 	}
+
+	http.HandleFunc("/register", WithCORS(func(w http.ResponseWriter, r *http.Request) {
+		RegisterHandler(w, r, db)
+	}))
+	http.HandleFunc("/login", WithCORS(func(w http.ResponseWriter, r *http.Request) {
+		LoginHandler(w, r, db)
+	}))
+
 }

@@ -1,6 +1,6 @@
 module awakelist
 
-go 1.24.2
+go 1.24.3
 
 require github.com/sirupsen/logrus v1.9.3
 
@@ -30,6 +30,7 @@ require (
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/go-chi/chi/v5 v5.2.1 // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/ilyakaznacheev/cleanenv v1.5.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/mattn/go-sqlite3 v1.14.28
