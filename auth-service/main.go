@@ -12,18 +12,7 @@ func main() {
 	}
 	defer db.Close()
 
-	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
-		RegisterHandler(w, r, db)
-	})
-	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		LoginHandler(w, r, db)
-	})
-
-	log.Println("Auth service started on :8000")
-	if err := http.ListenAndServe(":8000", nil); err != nil {
-		log.Fatal("Server error:", err)
-	}
-
+	// Регистрируем CORS-обёрнутые обработчики
 	http.HandleFunc("/register", WithCORS(func(w http.ResponseWriter, r *http.Request) {
 		RegisterHandler(w, r, db)
 	}))
@@ -31,4 +20,9 @@ func main() {
 		LoginHandler(w, r, db)
 	}))
 
+	log.Println("Auth service started on :8000")
+	// Запускаем сервер после регистрации маршрутов
+	if err := http.ListenAndServe(":8000", nil); err != nil {
+		log.Fatal("Server error:", err)
+	}
 }
