@@ -1,13 +1,16 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 	"strings"
+
+	"crowdfunding-service/pkg"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var JwtKey = []byte("my_super_secret_key") // должен совпадать с тем, что в auth-сервисе
+var JwtKey = []byte("my_super_secret_key")
 
 func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -32,6 +35,16 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		next.ServeHTTP(w, r)
+		// Извлекаем user_id из claims
+		if claims, ok := token.Claims.(jwt.MapClaims); ok {
+			if userIDFloat, ok := claims["user_id"].(float64); ok {
+				userID := int(userIDFloat)
+				ctx := context.WithValue(r.Context(), pkg.UserIDKey, userID)
+				next(w, r.WithContext(ctx))
+				return
+			}
+		}
+
+		http.Error(w, "Invalid token claims", http.StatusUnauthorized)
 	}
 }
